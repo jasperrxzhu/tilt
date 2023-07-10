@@ -22,7 +22,7 @@ sel_op = ir.op(
 )
 
 utils.print_IR(sel_op)
-
+utils.print_llvmIR(sel_op, "select_llvmIR.txt")
 
 ### Example 2 ###
 ### Print out the Loop IR for a Sum operator ###
@@ -42,6 +42,7 @@ sum_op = ir.op(
 )
 
 utils.print_IR(sum_op)
+utils.print_llvmIR(sum_op, "sum_llvmIR.txt")
 
 
 ### Example 3 ###
