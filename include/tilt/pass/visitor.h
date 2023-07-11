@@ -46,6 +46,7 @@ public:
     virtual void Visit(const CommitNull&) = 0;
     virtual void Visit(const AllocRegion&) = 0;
     virtual void Visit(const MakeRegion&) = 0;
+    virtual void Visit(const GetLStream&) = 0;
     virtual void Visit(const LoopNode&) = 0;
 };
 

@@ -26,6 +26,21 @@ struct Call : public ExprNode {
     void Accept(Visitor&) const final;
 };
 
+struct GetLStream : public ExprNode {
+    Expr reg_arrs;
+    size_t n;
+
+    GetLStream(Expr reg_arrs, size_t n) :
+        ExprNode(Type(reg_arrs->type.dtype.dtypes[n], Iter(0, -1))),
+        reg_arrs(reg_arrs), n(n)
+    {
+        ASSERT(!reg_arrs->type.is_val());
+        ASSERT(reg_arrs->type.dtype.is_arr());
+    }
+
+    void Accept(Visitor&) const final;
+};
+
 struct Select : public ValNode {
     Expr cond;
     Expr true_body;

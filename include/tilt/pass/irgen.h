@@ -66,6 +66,7 @@ protected:
     virtual OutExprTy visit(const AllocRegion&) = 0;
     virtual OutExprTy visit(const MakeRegion&) = 0;
     virtual OutExprTy visit(const Call&) = 0;
+    virtual OutExprTy visit(const GetLStream&) = 0;
     virtual OutExprTy visit(const LoopNode&) = 0;
 
     void Visit(const Out& expr) final { val() = visit(expr); }
@@ -96,6 +97,7 @@ protected:
     void Visit(const AllocRegion& expr) final { val() = visit(expr); }
     void Visit(const MakeRegion& expr) final { val() = visit(expr); }
     void Visit(const Call& expr) final { val() = visit(expr); }
+    void Visit(const GetLStream& expr) final { val() = visit(expr); }
     void Visit(const LoopNode& expr) final { val() = visit(expr); }
 
     CtxTy& switch_ctx(CtxTy& new_ctx) { swap(new_ctx, ctx()); return new_ctx; }

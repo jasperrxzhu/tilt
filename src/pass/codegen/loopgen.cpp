@@ -83,12 +83,28 @@ void LoopGen::build_tloop(function<Expr()> true_body, function<Expr()> false_bod
     loop->inputs.push_back(t_start);
     loop->inputs.push_back(t_end);
     loop->inputs.push_back(out_arg);
+    vector<DataType> in_reg_types;
+    vector<Sym> in_reg_syms;
     for (auto& in : ctx().op->inputs) {
         auto in_reg = _sym(in->name, in->type);
         set_sym(in, in_reg);
+        in_reg_syms.push_back(in_reg);
         if (!in_reg->type.is_beat()) {
-            loop->inputs.push_back(in_reg);
+            in_reg_types.push_back(in_reg->type.dtype);
         }
+    }
+    auto in_regs_sym = _sym("in_regs",
+                            Type(DataType(BaseType::REGPTRS,
+                                          in_reg_types,
+                                          in_reg_types.size()),
+                                 Iter(0, -1)));
+    loop->inputs.push_back(in_regs_sym);
+
+    // Create pointers for each input region
+    for (size_t i = 0; i < in_reg_syms.size(); ++i) {
+        auto in_reg = in_reg_syms[i];
+        loop->in_regs.push_back(in_reg);
+        set_expr(in_reg, _get_lstream(in_regs_sym, i));
     }
 
     // Create loop counter

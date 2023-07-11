@@ -10,6 +10,7 @@ void Symbol::Accept(Visitor& v) const { v.Visit(*this); }
 void Out::Accept(Visitor& v) const { v.Visit(*this); }
 void Beat::Accept(Visitor& v) const { v.Visit(*this); }
 void Call::Accept(Visitor& v) const { v.Visit(*this); }
+void GetLStream::Accept(Visitor& v) const { v.Visit(*this); }
 void IfElse::Accept(Visitor& v) const { v.Visit(*this); }
 void Select::Accept(Visitor& v) const { v.Visit(*this); }
 void Get::Accept(Visitor& v) const { v.Visit(*this); }

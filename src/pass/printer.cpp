@@ -27,6 +27,7 @@ void IRPrinter::Visit(const Symbol& sym)
 {
     if (!sym.type.is_val()) { ostr << "~"; }
     ostr << sym.name;
+    if (!sym.type.is_val() && sym.type.dtype.is_arr()) { ostr << "[]"; }
 }
 
 void IRPrinter::Visit(const Out& out) { Visit(static_cast<Symbol>(out)); }
@@ -249,6 +250,12 @@ void IRPrinter::Visit(const Call& call)
     emitfunc(call.name, call.args);
 }
 
+void IRPrinter::Visit(const GetLStream& gls)
+{
+    gls.reg_arrs->Accept(*this);
+    ostr << "[" << gls.n << "]";
+}
+
 void IRPrinter::Visit(const IfElse& ifelse)
 {
     ifelse.cond->Accept(*this);
@@ -296,6 +303,10 @@ void IRPrinter::Visit(const LoopNode& loop)
 
     emitcomment("initialization");
     emitnewline();
+    for (const auto &in_reg : loop.in_regs) {
+        emitassign(in_reg, loop.syms.at(in_reg));
+        emitnewline();
+    }
     unordered_set<Sym> bases;
     for (const auto& [_, base] : loop.state_bases) {
         emitassign(base, loop.syms.at(base));

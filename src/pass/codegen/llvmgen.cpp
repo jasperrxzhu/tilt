@@ -89,6 +89,8 @@ llvm::Type* LLVMGen::lltype(const Type& type)
 {
     if (type.is_val()) {
         return lltype(type.dtype);
+    } else if (type.dtype.is_arr()) {
+        return llregptrarrtype(type.dtype.size);
     } else {
         return llregptrtype();
     }
@@ -435,6 +437,12 @@ Value* LLVMGen::visit(const Call& call)
     return llcall(call.name, lltype(call), call.args);
 }
 
+Value* LLVMGen::visit(const GetLStream& gls)
+{
+    auto reg_arrs_val = eval(gls.reg_arrs);
+    return builder()->CreateExtractValue(reg_arrs_val, gls.n);
+}
+
 Value* LLVMGen::visit(const LoopNode& loop)
 {
     // Build inner loops
@@ -473,6 +481,9 @@ Value* LLVMGen::visit(const LoopNode& loop)
     // Initialization of loop states
     loop_fn->getBasicBlockList().push_back(preheader_bb);
     builder()->SetInsertPoint(preheader_bb);
+    for (const auto& in_reg : loop.in_regs) {
+        eval(in_reg);
+    }
     map<Sym, llvm::Value*> base_inits;
     for (const auto& [_, base] : loop.state_bases) {
         base_inits[base] = eval(loop.syms.at(base));

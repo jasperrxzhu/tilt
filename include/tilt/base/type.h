@@ -26,6 +26,7 @@ enum class BaseType {
     FLOAT32,
     FLOAT64,
     STRUCT,
+    REGPTRS,
     PTR,
     UNKNOWN,
 
@@ -46,6 +47,10 @@ struct DataType {
         switch (btype) {
             case BaseType::STRUCT: ASSERT(dtypes.size() > 0); break;
             case BaseType::PTR: ASSERT(dtypes.size() == 1); break;
+            case BaseType::REGPTRS:
+                ASSERT(size > 0);
+                ASSERT(dtypes.size() == size);
+                break;
             default: ASSERT(dtypes.size() == 0); break;
         }
     }

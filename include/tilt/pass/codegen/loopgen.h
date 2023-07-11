@@ -47,6 +47,7 @@ private:
     Expr visit(const Out&) final;
     Expr visit(const Beat&) final;
     Expr visit(const Call&) final;
+    Expr visit(const GetLStream&) final { throw runtime_error("Invalid expression"); };
     Expr visit(const IfElse&) final;
     Expr visit(const Select&) final;
     Expr visit(const Get&) final;

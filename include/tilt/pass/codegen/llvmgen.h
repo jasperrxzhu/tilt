@@ -58,6 +58,7 @@ private:
     llvm::Value* visit(const Out&) final { throw std::runtime_error("Invalid expression"); }
     llvm::Value* visit(const Beat&) final { throw std::runtime_error("Invalid expression"); }
     llvm::Value* visit(const Call&) final;
+    llvm::Value* visit(const GetLStream&) final;
     llvm::Value* visit(const IfElse&) final;
     llvm::Value* visit(const Select&) final;
     llvm::Value* visit(const Get&) final;
@@ -106,6 +107,7 @@ private:
 
     llvm::Type* llregtype() { return llvm::StructType::getTypeByName(llctx(), "struct.region_t"); }
     llvm::Type* llregptrtype() { return llvm::PointerType::get(llregtype(), 0); }
+    llvm::Type* llregptrarrtype(size_t size) { return llvm::ArrayType::get(llregptrtype(), size); }
 
     llvm::Module* llmod() { return _llmod.get(); }
     llvm::LLVMContext& llctx() { return _llctx; }

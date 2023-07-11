@@ -124,6 +124,7 @@ REGISTER_EXPR(_op, OpNode)
 
 // Misc expressions
 REGISTER_EXPR(_call, Call)
+REGISTER_EXPR(_get_lstream, GetLStream)
 REGISTER_EXPR(_read, Read)
 REGISTER_EXPR(_get, Get)
 REGISTER_EXPR(_new, New)

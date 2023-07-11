@@ -40,6 +40,7 @@ public:
     void Visit(const Out&) override;
     void Visit(const Beat&) override;
     void Visit(const Call&) override;
+    void Visit(const GetLStream&) override;
     void Visit(const IfElse&) override;
     void Visit(const Select&) override;
     void Visit(const Get&) override;

@@ -224,6 +224,7 @@ struct LoopNode : public FuncNode {
     vector<Index> idxs;
 
     // States
+    vector<Sym> in_regs;
     map<Sym, Sym> state_bases;
 
     // loop condition
