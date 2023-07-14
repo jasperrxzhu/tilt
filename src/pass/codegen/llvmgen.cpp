@@ -90,7 +90,7 @@ llvm::Type* LLVMGen::lltype(const Type& type)
     if (type.is_val()) {
         return lltype(type.dtype);
     } else if (type.dtype.is_arr()) {
-        return llregptrarrtype(type.dtype.size);
+        return llregptrptrtype();
     } else {
         return llregptrtype();
     }
@@ -440,7 +440,10 @@ Value* LLVMGen::visit(const Call& call)
 Value* LLVMGen::visit(const GetLStream& gls)
 {
     auto reg_arrs_val = eval(gls.reg_arrs);
-    return builder()->CreateExtractValue(reg_arrs_val, gls.n);
+    auto gls_gep = builder()->CreateInBoundsGEP(llregptrtype(),
+                                                reg_arrs_val,
+                                                builder()->getInt64(gls.n));
+    return builder()->CreateLoad(llregptrtype(), gls_gep);
 }
 
 Value* LLVMGen::visit(const LoopNode& loop)
@@ -473,7 +476,8 @@ Value* LLVMGen::visit(const LoopNode& loop)
     // We add `noalias` attribute to the region parameters to help compiler autovectorize
     for (size_t i = 0; i < loop.inputs.size(); i++) {
         // If type is not a value, then it should be a region
-        if (!loop.inputs[i]->type.is_val()) {
+        if (!loop.inputs[i]->type.is_val()
+            && !loop.inputs[i]->type.dtype.is_arr()) {
             loop_fn->addParamAttr(i, Attribute::NoAlias);
         }
     }

@@ -1,8 +1,9 @@
 import tilt
 from tilt import ir, utils, region
+import sys
 
 ### Example 1 ###
-### Print out the Loop IR for a Select operator ###
+### Print out IR and execute Select operator ###
 in_stream = ir.sym("in",
                    ir.Type(ir.DataType(ir.BaseType.f32),
                            ir.Iter(0, -1)))
@@ -23,6 +24,19 @@ sel_op = ir.op(
 
 utils.print_IR(sel_op)
 utils.print_llvmIR(sel_op, "select_llvmIR.txt")
+print(sys.getrefcount(sel_op))
+
+select_in_reg = region.reg(100, ir.DataType(ir.BaseType.f32))
+for i in range(100):
+    select_in_reg.commit_data(i + 1)
+    select_in_reg.write_data(i + 0.5, i + 1, select_in_reg.get_end_idx())
+print(select_in_reg)
+select_out_reg = region.reg(100, ir.DataType(ir.BaseType.f32))
+compiled_sel = utils.compile(sel_op)
+print(sys.getrefcount(compiled_sel))
+print(sys.getrefcount(select_in_reg))
+region.execute(compiled_sel, 0, 100, select_out_reg, [select_in_reg])
+print(select_out_reg)
 
 ### Example 2 ###
 ### Print out the Loop IR for a Sum operator ###

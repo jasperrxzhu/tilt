@@ -107,7 +107,7 @@ private:
 
     llvm::Type* llregtype() { return llvm::StructType::getTypeByName(llctx(), "struct.region_t"); }
     llvm::Type* llregptrtype() { return llvm::PointerType::get(llregtype(), 0); }
-    llvm::Type* llregptrarrtype(size_t size) { return llvm::ArrayType::get(llregptrtype(), size); }
+    llvm::Type* llregptrptrtype() { return llvm::PointerType::get(llregptrtype(), 0); }
 
     llvm::Module* llmod() { return _llmod.get(); }
     llvm::LLVMContext& llctx() { return _llctx; }

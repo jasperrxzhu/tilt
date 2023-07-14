@@ -24,21 +24,22 @@ PyReg::PyReg(idx_t size,
     this->max_size = get_buf_size(size);
     this->schema = schema;
 
-    this->reg = make_unique<region_t>();
+    this->reg = new region_t;
     ival_t* tl = new ival_t[max_size];
     char* data = new char[max_size * Cvtr::dt_to_bytes(schema)];
-    init_region(this->reg.get(), 0, this->max_size, tl, data);
+    init_region(this->reg, 0, this->max_size, tl, data);
 }
 
 PyReg::~PyReg(void)
 {
     delete [] this->reg->tl;
     delete [] this->reg->data;
+    delete this->reg;
 }
 
 region_t* PyReg::get_reg(void)
 {
-    return this->reg.get();
+    return this->reg;
 }
 
 string PyReg::str(void)
@@ -60,7 +61,7 @@ string PyReg::str(void)
         ival_t tl_i = reg->tl[i];
         os << "[";
         os << "[" << tl_i.t << "," << tl_i.d << "]" << ",";
-        append_data_to_sstream(os, *schema, fetch(reg.get(), tl_i.t + tl_i.d, i, payload_bytes));
+        append_data_to_sstream(os, *schema, fetch(reg, tl_i.t + tl_i.d, i, payload_bytes));
         os << "]";
     }
     os << "]" << endl;
@@ -129,7 +130,7 @@ void PyReg::write_data(py::object payload, ts_t t, idx_t i)
 {
     write_data_to_ptr(payload,
                       *schema,
-                      fetch(reg.get(), t, i,
+                      fetch(reg, t, i,
                             Cvtr::dt_to_bytes(schema)));
 }
 
