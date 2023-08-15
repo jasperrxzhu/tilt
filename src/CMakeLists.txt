@@ -2,6 +2,7 @@ set(SRC_FILES
     ir/ir.cpp
     builder/tilder.cpp
     pass/printer.cpp
+    pass/tiltpass/opfusion.cpp
     pass/codegen/loopgen.cpp
     pass/codegen/llvmgen.cpp
     pass/codegen/vinstr.cpp

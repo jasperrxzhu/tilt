@@ -39,6 +39,9 @@ struct Symbol : public ExprNode {
     Symbol(string name, Expr expr) : Symbol(name, expr->type) {}
 
     void Accept(Visitor&) const override;
+    bool operator==(const Symbol& o) const {
+        return (this->name == o.name) && (this->type == o.type);
+    }
 };
 
 struct FuncNode : public ExprNode {
