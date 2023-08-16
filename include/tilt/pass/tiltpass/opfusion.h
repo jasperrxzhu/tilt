@@ -26,36 +26,67 @@ public:
     void fuse(void);
 
 private:
-    void Visit(const Symbol& symbol) final {}
-    void Visit(const Out& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const Beat& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const Call& expr) final {}
-    void Visit(const IfElse& expr) final {}
-    void Visit(const Select& expr) final {}
-    void Visit(const Get& expr) final {}
-    void Visit(const New& expr) final {}
-    void Visit(const Exists& expr) final {}
-    void Visit(const ConstNode& expr) final {}
-    void Visit(const Cast& expr) final {}
-    void Visit(const NaryExpr& expr) final {}
-    void Visit(const SubLStream& expr) final {}
-    void Visit(const Element& expr) final {}
-    void Visit(const OpNode& expr) final {}
-    void Visit(const Reduce& expr) final {}
-    void Visit(const Fetch& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const Read& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const Write& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const Advance& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const GetCkpt& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const GetStartIdx& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const GetEndIdx& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const GetStartTime& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const GetEndTime& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const CommitData& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const CommitNull& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const AllocRegion& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const MakeRegion& expr) final { throw runtime_error("Invalid expression"); }
-    void Visit(const LoopNode& expr) final { throw runtime_error("Invalid expression"); }
+    Expr visit(const Symbol&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Out&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Beat&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Call&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const IfElse&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Select&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Get&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const New&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Exists&);
+    Expr visit(const ConstNode&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Cast&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const NaryExpr&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const SubLStream&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Element&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const OpNode&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Reduce&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Fetch&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Read&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Write&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const Advance&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const GetCkpt&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const GetStartIdx&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const GetEndIdx&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const GetStartTime&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const GetEndTime&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const CommitData&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const CommitNull&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const AllocRegion&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const MakeRegion&) { throw runtime_error("Invalid expression"); }
+    Expr visit(const LoopNode&) { throw runtime_error("Invalid expression"); }
+
+    void Visit(const Symbol& expr) final { val = visit(expr); }
+    void Visit(const Out& expr) final { val = visit(expr); }
+    void Visit(const Beat& expr) final { val = visit(expr); }
+    void Visit(const IfElse& expr) final { val = visit(expr); }
+    void Visit(const Select& expr) final { val = visit(expr); }
+    void Visit(const Get& expr) final { val = visit(expr); }
+    void Visit(const New& expr) final { val = visit(expr); }
+    void Visit(const Exists& expr) final { val = visit(expr); }
+    void Visit(const ConstNode& expr) final { val = visit(expr); }
+    void Visit(const Cast& expr) final { val = visit(expr); }
+    void Visit(const NaryExpr& expr) final { val = visit(expr); }
+    void Visit(const SubLStream& expr) final { val = visit(expr); }
+    void Visit(const Element& expr) final { val = visit(expr); }
+    void Visit(const OpNode& expr) final { val = visit(expr); }
+    void Visit(const Reduce& expr) final { val = visit(expr); }
+    void Visit(const Fetch& expr) final { val = visit(expr); }
+    void Visit(const Read& expr) final { val = visit(expr); }
+    void Visit(const Write& expr) final { val = visit(expr); }
+    void Visit(const Advance& expr) final { val = visit(expr); }
+    void Visit(const GetCkpt& expr) final { val = visit(expr); }
+    void Visit(const GetStartIdx& expr) final { val = visit(expr); }
+    void Visit(const GetEndIdx& expr) final { val = visit(expr); }
+    void Visit(const GetStartTime& expr) final { val = visit(expr); }
+    void Visit(const GetEndTime& expr) final { val = visit(expr); }
+    void Visit(const CommitData& expr) final { val = visit(expr); }
+    void Visit(const CommitNull& expr) final { val = visit(expr); }
+    void Visit(const AllocRegion& expr) final { val = visit(expr); }
+    void Visit(const MakeRegion& expr) final { val = visit(expr); }
+    void Visit(const Call& expr) final { val = visit(expr); }
+    void Visit(const LoopNode& expr) final { val = visit(expr); }
 
     Expr eval(const Expr expr)
     {

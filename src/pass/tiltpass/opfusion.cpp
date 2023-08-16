@@ -55,3 +55,10 @@ void OpFusion::fuse(void)
     // update predicates
     root_op->pred = eval(root_op->pred);
 }
+
+Expr OpFusion::visit(const Exists& exists)
+{
+    return (*(exists.sym) == *(to_replace_sym)) ?
+        to_fuse_op->pred :
+        _exists(exists.sym);
+}
