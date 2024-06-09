@@ -79,6 +79,10 @@ PYBIND11_MODULE(ir, m) {
         .def(py::init<string, Expr>())
         .def_readonly("name", &Symbol::name);
 
+    /* Out and Beat definitions */
+    REGISTER_CLASS(Out, Symbol, m, "out", DataType)
+    REGISTER_CLASS(Beat, Symbol, m, "beat", Iter)
+
     /* Element/Substream/Windowing and Related Type Bindings */
     py::class_<Point, shared_ptr<Point>>(m, "point")
         .def(py::init<int64_t>());
